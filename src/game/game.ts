@@ -49,6 +49,7 @@ export class PKGame {
 	}
 
 	update(deltaTime: deltaTime) {
+		deltaTime *= 100;
 		// console.log(deltaTime)
 		let job = this.jobs[this.data.currentJob];
 		job?.update(deltaTime);

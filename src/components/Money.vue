@@ -27,14 +27,14 @@ function useCoin(one: number, mod: number, postfix: string) {
 				: mod && money.value > one * mod * precition.value ? false
 					: true);
 	const text = computed(() => {
-		const space = coins.value > 9 ? '' : money.value > one * mod ? '0' : '\u2007';
+		const space = coins.value > 9 ? '' : mod && money.value > one * mod ? '0' : '\u2007';
 		return space + KMBFormat(coins.value) + postfix + ' ';
 	});
 	return reactive({ coins, show, text });
 }
 
 const copper = useCoin(1e0, 100, 'c');
-const silver = useCoin(1e2, 100, 's');
+const silver = useCoin(1e2, 100, '$');
 const gold__ = useCoin(1e4, 100, 'g');
 const platin = useCoin(1e6, 0x0, 'p');
 
