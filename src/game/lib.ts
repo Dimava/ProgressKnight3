@@ -35,17 +35,19 @@ export function useUpdate({
 
 function deepAssign<T>(target: T, source: T) {
 	for (let k in source) {
-		if (typeof target[k] == "undefined") {
-			target[k] = source[k];
+		const sv = source[k],
+			tv = target[k];
+		if (sv != sv /* isNaN */) continue;
+		if (sv == null) continue;
+		if (tv == null) {
+			target[k] = sv;
 			continue;
 		}
-		if (typeof source[k] != typeof target[k]) {
-			continue;
-		}
-		if (typeof source[k] != "object") {
-			target[k] = source[k];
+		if (typeof sv != typeof tv) continue;
+		if (typeof sv != "object") {
+			target[k] = sv;
 		} else {
-			deepAssign(target[k], source[k]);
+			deepAssign(tv, sv);
 		}
 	}
 	return target;
@@ -55,17 +57,24 @@ export function useLocalStorage<T extends object>(
 	key: string,
 	makeDefault: () => T
 ) {
-	const data = reactive(makeDefault());
+	const data: Reactive<T> = reactive(makeDefault());
 	function save() {
 		localStorage.setItem(key, JSON.stringify(toRaw(data)));
 	}
 	function load() {
 		deepAssign(data, JSON.parse(localStorage.getItem(key) ?? "{}"));
+		return data;
 	}
+	function reset() {
+		localStorage.setItem(key, JSON.stringify(makeDefault()));
+		location.reload();
+	}
+	load();
 	return {
 		data,
 		save,
 		load,
+		reset,
 	};
 }
 

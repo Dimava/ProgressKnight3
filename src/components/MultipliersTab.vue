@@ -4,14 +4,14 @@
 			<Cell> Multiplier </Cell>
 			<Cell> Value </Cell>
 		</GridRow>
-		<template v-for="multiplier in multipliers">
-			<GridRow v-if="multiplier.multiplier != 1 || 1">
+		<template v-for="mul in multis">
+			<GridRow v-if="mul.multiplier != 1 || 1">
 				<Cell class="pl-12 pr-24">
 					<ProgressBar class="p5" :progress="0">
-						{{ multiplier.name }}
+						{{ mul.name }}
 					</ProgressBar>
 				</Cell>
-				<Cell> {{ multiplier.effectText }} </Cell>
+				<Cell> {{ mul.effectText }} </Cell>
 			</GridRow>
 		</template>
 	</Grid>
@@ -19,11 +19,13 @@
 
 <script setup lang="ts" name="MultipliersTab">
 import { toRef, computed } from 'vue';
-import { useGame } from './game';
+import { Character } from '../game/character';
+import { multiplierIds } from '../game/data'
 
+const props = defineProps<{
+	char: Character
+}>();
 
-const { game, data } = useGame();
-
-const multipliers = computed(() => Object.values(game.multipliers));
+const multis = computed(() => Object.values(props.char.multipliers))
 
 </script>

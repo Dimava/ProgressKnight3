@@ -1,6 +1,6 @@
 <template>
 	<Grid id="skills" cols="9 4 7 5 3 4" class="gridList">
-		<template v-for="cat of skillCategories">
+		<!-- <template v-for="cat of skillCategories">
 			<GridRow class="categoryHeader" :category="cat">
 				<Cell> {{ cat.slice(2) }} </Cell>
 				<Cell> Level </Cell>
@@ -21,23 +21,24 @@
 				<Cell>
 					{{ skill.effectText }}
 				</Cell>
-				<Cell> {{ KMBFormat(skill.currentExp.value) }} / {{ skill.currentExpReq }} </Cell>
-				<Cell> +{{ KMBFormat(skill.currentExpGain) }} </Cell>
+				<Cell> {{ KMBTFormat(skill.currentExp.value) }} / {{ skill.currentExpReq }} </Cell>
+				<Cell> +{{ KMBTFormat(skill.currentExpGain) }} </Cell>
 				<Cell> {{ skill.maxLevelReached }} </Cell>
 			</GridRow>
-		</template>
+		</template> -->
+		skills broken atm
 	</Grid>
 </template>
 
 <script setup lang="ts" name="SkillsTab">
 import { toRef, computed } from 'vue';
-import { useGame } from './game';
-import {KMBFormat} from './lib'
+import { Character } from '../game/character';
+import { jobCategoryIds } from '../game/data'
 
+const props = defineProps<{
+	char: Character
+}>();
 
-const { game, data } = useGame();
-
-const skills = computed(() => Object.values(game.skills));
-const skillCategories = computed(() => Array.from(new Set(skills.value.map(e => e.category))));
+const jobs = computed(() => Object.values(props.char.jobs))
 
 </script>

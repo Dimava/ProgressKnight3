@@ -1,8 +1,8 @@
 <template>
 	<Grid id="jobs" cols="9 4 7 5 3 4" class="gridList">
-		<template v-for="cat of jobCategories">
+		<template v-for="cat of jobCategoryIds">
 			<GridRow class="categoryHeader" :category="cat">
-				<Cell> {{ cat.slice(2) }} </Cell>
+				<Cell> {{ cat }} </Cell>
 				<Cell> Level </Cell>
 				<Cell> Income/day </Cell>
 				<Cell> Xp req </Cell>
@@ -10,49 +10,50 @@
 				<Cell> Max level </Cell>
 			</GridRow>
 			<GridRow v-for="job in jobs.filter(e => e.category == cat)" class="job"
-				:class="{ selected: data.currentJob == job.id }">
+				:class="{ selected: char.saved.currentJob == job.id }">
 				<Cell class="pl-12 pr-24">
-					<ProgressBar @click="game.selectJob(job.id)" class="p5" :progress="job.currentExp.value"
+					<ProgressBar @click="job.select()" class="p5" :progress="job.saved.currentExp"
 						:max="job.currentExpReq">
 						{{ job.name }}
 					</ProgressBar>
 				</Cell>
-				<Cell> {{ job.currentLevel }} </Cell>
+				<Cell> {{ job.saved.currentLevel }} </Cell>
 				<Cell>
 					<Money :money="job.currentIncome" />
 				</Cell>
-				<Cell> {{ ~~job.currentExp }} / {{ job.currentExpReq }} </Cell>
+				<Cell> {{ ~~job.saved.currentExp }} / {{ job.currentExpReq }} </Cell>
 				<Cell> +{{ job.currentExpGain }} </Cell>
-				<Cell> {{ job.maxLevelReached }} </Cell>
+				<Cell> {{ job.saved.maxLevelReached }} </Cell>
 			</GridRow>
 		</template>
+		<span v-if="!char.saved.currentJob"> Select a job! </span>
 	</Grid>
 </template>
 
 <script setup lang="ts" name="JobsTab">
 import { toRef, computed } from 'vue';
-import { useGame } from './game';
+import { Character } from '../game/character';
+import { jobCategoryIds } from '../game/data'
 
+const props = defineProps<{
+	char: Character
+}>();
 
-const { game, data } = useGame();
+const jobs = computed(() => Object.values(props.char.jobs))
 
-const paused = toRef(data, 'paused');
-
-const jobs = computed(() => Object.values(game.jobs));
-const jobCategories = computed(() => Array.from(new Set(jobs.value.map(e => e.category))));
 
 </script>
 
 <style>
-
 .gridList .categoryHeader>* {
 	background-color: red;
 	padding: 8px;
 	border-top-width: 0;
 }
+
 .gridList .categoryHeader+*>* {
 	border-top-width: 0;
-    white-space: pre-line;
+	white-space: pre-line;
 }
 
 .gridList {
@@ -78,6 +79,4 @@ const jobCategories = computed(() => Array.from(new Set(jobs.value.map(e => e.ca
 	--fg: orange;
 	outline: 1px solid #777;
 }
-
-
 </style>

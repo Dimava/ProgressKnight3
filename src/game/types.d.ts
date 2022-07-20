@@ -4,8 +4,8 @@ type displayedName = Branded<"displayedName", string>;
 type displayedDesc = Branded<"displayedDesc", string>;
 type multiplierId = import("./data").multiplierId;
 type jobCategoryId = import("./data").jobCategoryId;
-type skillCategoryId = import("./data").skillCategoryId;
-type skillId = import("./data").skillId;
+// type skillCategoryId = import("./data").skillCategoryId;
+// type skillId = import("./data").skillId;
 type jobId = import("./data").jobId;
 
 interface RawMultiplier {
@@ -51,6 +51,10 @@ interface SavedJob {
 }
 interface SavedCharacter {
 	jobs: Record<jobId, SavedJob>;
+
+	money: money;
+	currentJob?: jobId;
+	paused: boolean;
 }
 
 type deltaTime = Branded<"deltaTime", number>;
