@@ -1,9 +1,12 @@
-
 type Branded<T, V = string> = V & { __brand?: T };
 
 type displayedName = Branded<"displayedName", string>;
 type displayedDesc = Branded<"displayedDesc", string>;
-type multiplierId = import('./data').multiplierId;
+type multiplierId = import("./data").multiplierId;
+type jobCategoryId = import("./data").jobCategoryId;
+type skillCategoryId = import("./data").skillCategoryId;
+type skillId = import("./data").skillId;
+type jobId = import("./data").jobId;
 
 interface RawMultiplier {
 	name?: displayedName;
@@ -16,7 +19,7 @@ interface RawJob {
 	desc?: displayedDesc;
 	effectTextTemplate?: string;
 
-	category: string;
+	category: jobCategoryId;
 	requirements?: RawRequirement[];
 
 	levelPay: (level: number) => number;
@@ -32,17 +35,31 @@ interface RawSkill {
 	effectTextTemplate?: string;
 }
 
-interface RawRequirement {
+interface RawRequirement {}
 
+interface RawCategory {
+	type: "jobs" | "skills";
+	name?: displayedName;
+	desc?: displayedDesc;
 }
 
-// type deltaTime = Branded<'deltaTime', number>;
-// type percent = Branded<'percent', number>;
+interface SavedSkill {}
+interface SavedJob {
+	currentLevel: level;
+	currentExp: exp;
+	maxLevelReached: level;
+}
+interface SavedCharacter {
+	jobs: Record<jobId, SavedJob>;
+}
 
-// type level = Branded<'level', number>;
-// type exp = Branded<'exp', number>;
-// type multi = Branded<'multiplier', number>;
-// type money = Branded<'money', number>;
+type deltaTime = Branded<"deltaTime", number>;
+type percent = Branded<"percent", number>;
+
+type level = Branded<"level", number>;
+type exp = Branded<"exp", number>;
+type multi = Branded<"multiplier", number>;
+type money = Branded<"money", number>;
 
 // type multiplierId = //Branded<'multiplierId',
 // 	import('./rawData').rawMultiplierId; //>;
@@ -134,3 +151,7 @@ interface RawRequirement {
 // interface ShopItemSave {
 // 	toggledOn: boolean,
 // }
+
+interface ObjectConstructor {
+	fromEntries<K extends string, V>(entries: [K, V][]): Partial<Record<K, V>>;
+}

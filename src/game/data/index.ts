@@ -1,37 +1,54 @@
-import * as multipliersRaw from "./multipliers";
-export { multipliersRaw };
-export type multiplierId = keyof typeof multipliersRaw;
+import * as rawMultipliers from "./multipliers";
+export { rawMultipliers as rawMultipliers };
+export type multiplierId = keyof typeof rawMultipliers;
+export const multiplierIds = Object.keys(rawMultipliers) as multiplierId[];
 
-import * as jobsRaw from "./jobs";
-export { jobsRaw };
-export type jobId = keyof typeof jobsRaw;
+import * as rawJobs from "./jobs";
+export { rawJobs as jobsRaw };
+export type jobId = keyof typeof rawJobs;
+export const jobIds = Object.keys(rawMultipliers) as jobId[];
 
+import * as rawCategories from "./categories";
+import { Character } from "../character";
+import { reactive } from "vue";
+export type categoryId = keyof typeof rawCategories;
+type filteredCategoryIds<Q> = keyof {
+	[K in categoryId as typeof rawCategories[K] extends { type: Q }
+		? K
+		: never]: true;
+};
+export type jobCategoryId = filteredCategoryIds<"jobs">;
 
-
-class Multiplier {
-	id: `m${multiplierId}`;
+export class Multiplier {
+	id: multiplierId;
 	name: displayedName;
 	desc: displayedDesc;
 
-	constructor(id: multiplierId) {
-		const raw = multipliersRaw[id];
-		this.id = `m${id}`;
+	readonly character: Character;
+
+	constructor(id: multiplierId, character: Character) {
+		const raw = rawMultipliers[id];
+		this.id = id;
 		this.name = raw.name ?? id;
 		this.desc = raw.desc ?? `${id} Multiplier`;
+		this.character = character;
 	}
 }
 
-
-class Job {
-	id: `m${multiplierId}`;
+export class Job {
+	id: jobId;
 	name: displayedName;
 	desc: displayedDesc;
 
-	constructor(id: multiplierId) {
-		const raw = multipliersRaw[id];
-		this.id = `m${id}`;
+	saved: Reactive<SavedJob>;
+
+	constructor(id: jobId) {
+		const raw = rawJobs[id];
+		this.id = id;
 		this.name = raw.name ?? id;
-		this.desc = raw.desc ?? `${id} Multiplier`;
+		this.desc = raw.desc ?? `${id} Job`;
+
+		this.saved = reactive;
 	}
 
 	// get currentIncome(): money {
@@ -65,9 +82,7 @@ class Job {
 	// }
 }
 
-
 class Skill {
-
 	// get currentExpGain(): multi {
 	// 	return this.expMultiplier;
 	// }
@@ -96,7 +111,6 @@ class Skill {
 	// 		.map(([k, v]) => `x${KMBFormat(v)} ${this._game.multipliers[k].name}`).join('\n');
 	// 	}
 	// }
-
 	// update(deltaTime: deltaTime) {
 	// 	this.currentExp.value += this.currentExpGain * deltaTime;
 	// 	if (this.currentExp.value > this.currentExpReq) {

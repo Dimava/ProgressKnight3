@@ -1,10 +1,11 @@
-import { computed, reactive, ref, unref } from 'vue';
-import * as Vue from 'vue';
+import { computed, reactive, ref, unref } from "vue";
+import * as Vue from "vue";
 
 declare global {
-	type Ref<T> = import('vue').Ref<T>;
-	type ComputedRef<T> = import('vue').ComputedRef<T>
-	type ToRefs<T> = import('vue').ToRefs<T>
+	type Ref<T> = import("vue").Ref<T>;
+	type ComputedRef<T> = import("vue").ComputedRef<T>;
+	type ToRefs<T> = import("vue").ToRefs<T>;
+	type Reactive<T> = import("vue").UnwrapNestedRefs<T>;
 
 	// const computed: typeof Vue.computed;
 	// const ref: typeof Vue.ref;
@@ -17,7 +18,6 @@ Object.assign(globalThis, {
 	ref,
 	reactive,
 	unref,
-})
+});
 
-
-export { };
+export {};

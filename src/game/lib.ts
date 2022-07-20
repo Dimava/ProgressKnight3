@@ -35,14 +35,14 @@ export function useUpdate({
 
 function deepAssign<T>(target: T, source: T) {
 	for (let k in source) {
-		if (typeof target[k] == 'undefined') {
+		if (typeof target[k] == "undefined") {
 			target[k] = source[k];
 			continue;
 		}
 		if (typeof source[k] != typeof target[k]) {
 			continue;
 		}
-		if (typeof source[k] != 'object') {
+		if (typeof source[k] != "object") {
 			target[k] = source[k];
 		} else {
 			deepAssign(target[k], source[k]);
@@ -60,9 +60,52 @@ export function useLocalStorage<T extends object>(
 		localStorage.setItem(key, JSON.stringify(toRaw(data)));
 	}
 	function load() {
-		deepAssign(data, JSON.parse(localStorage.getItem(key) ?? '{}'))
+		deepAssign(data, JSON.parse(localStorage.getItem(key) ?? "{}"));
 	}
 	return {
-		data, save, load
+		data,
+		save,
+		load,
 	};
+}
+
+export function xpPow(base: number, growth: number) {
+	return (level: number) => round(base * growth ** level, 1);
+}
+export function moneyLin(base: number, growth: number) {
+	return (level: number) => base * (1 + growth * level);
+}
+export function round(n: number, base = 1) {
+	if (base == 1) return Math.round(n);
+	return Math.round(n / base) * base;
+}
+
+export function defineValue<T, K extends keyof T>(o: T, p: K, v: T[K] = o[p]) {
+	Object.defineProperty(o, p, {
+		value: v,
+		configurable: true,
+		enumerable: false,
+		writable: true,
+	});
+	return o[p];
+}
+
+/** rounding down, over 1e4 */
+export function KMBTFormat(n: number) {
+	const suffixes = "K,M,B,T".split(",");
+	if (n < 1e4)
+		return n
+			.toFixed(4)
+			.replace(/\.?0+$/, "")
+			.slice(0, 4)
+			.replace(/\.$/, "");
+	let [s, a, b, e] =
+		n.toExponential(4).match(/(\d+)\.(\d+)e\+(\d+)/) || suffixes;
+	a += b;
+	let pow = +e;
+	let mod = pow % 3;
+	let div = ~~(pow / 3);
+	a = a.slice(0, 1 + mod) + "." + a.slice(1 + mod);
+	s = suffixes[div - 1] || "e" + div * 3;
+	return `${a.slice(0, 5)}${s}`;
 }
