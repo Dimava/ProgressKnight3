@@ -9,7 +9,7 @@
 
 <script setup lang="ts" name="Money">
 import { computed, reactive, toRef } from 'vue';
-import { KMBFormat } from '../game/lib';
+import { KMBFormat } from './lib';
 
 const props = defineProps<{
 	money: number;
@@ -34,7 +34,7 @@ function useCoin(one: number, mod: number, postfix: string) {
 }
 
 const copper = useCoin(1e0, 100, 'c');
-const silver = useCoin(1e2, 100, '$');
+const silver = useCoin(1e2, 100, 's');
 const gold__ = useCoin(1e4, 100, 'g');
 const platin = useCoin(1e6, 0x0, 'p');
 

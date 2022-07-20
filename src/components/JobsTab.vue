@@ -31,7 +31,7 @@
 
 <script setup lang="ts" name="JobsTab">
 import { toRef, computed } from 'vue';
-import { useGame } from '../game/game';
+import { useGame } from './game';
 
 
 const { game, data } = useGame();
@@ -52,6 +52,7 @@ const jobCategories = computed(() => Array.from(new Set(jobs.value.map(e => e.ca
 }
 .gridList .categoryHeader+*>* {
 	border-top-width: 0;
+    white-space: pre-line;
 }
 
 .gridList {

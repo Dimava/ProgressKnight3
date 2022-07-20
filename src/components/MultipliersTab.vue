@@ -19,7 +19,7 @@
 
 <script setup lang="ts" name="MultipliersTab">
 import { toRef, computed } from 'vue';
-import { useGame } from '../game/game';
+import { useGame } from './game';
 
 
 const { game, data } = useGame();

@@ -40,11 +40,11 @@
 
 <script setup lang="ts" name="ProgressKnight">
 import { toRef, computed, ref } from 'vue';
-import { useGame } from '../game/game';
+import { useGame } from './game';
 import JobsTab from './JobsTab.vue';
 import SkillsTab from './SkillsTab.vue';
 import MultipliersTab from './MultipliersTab.vue';
-import { debug } from '../game/lib'
+import { debug } from './lib'
 
 
 const tabs = ['Jobs', 'Skills', 'Multipliers'];

@@ -31,8 +31,8 @@
 
 <script setup lang="ts" name="SkillsTab">
 import { toRef, computed } from 'vue';
-import { useGame } from '../game/game';
-import {KMBFormat} from '../game/lib'
+import { useGame } from './game';
+import {KMBFormat} from './lib'
 
 
 const { game, data } = useGame();

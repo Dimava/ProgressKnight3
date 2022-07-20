@@ -1,6 +1,3 @@
-import './game/types'
-
-
 import Cell from './components/Cell.vue';
 import Grid from './components/Grid.vue';
 import GridRow from './components/GridRow.vue';
@@ -14,7 +11,9 @@ import { createI18n, useI18n } from 'vue-i18n'
 
 import en from './locales/en'
 
-const i18n = createI18n<false>({
+
+
+const i18n = createI18n<{messages: typeof en}, 'en'>({
 	legacy: false,
 	locale: 'en',
 	// messages
@@ -22,6 +21,8 @@ const i18n = createI18n<false>({
 		en,
 	},
 })
+
+export const $t = i18n.global.t;
 
 // const { t, n } = useI18n<{message: typeof en}>({ inheritLocale: true })
 // t('jobs.qwe')

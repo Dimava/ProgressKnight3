@@ -1,4 +1,7 @@
 const en = {
+	tableHeader: {
+		
+	},
 	label: {
 		level: 'Level',
 		incomePerDay: 'Income/day',
