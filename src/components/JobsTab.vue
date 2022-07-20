@@ -12,7 +12,7 @@
 			<GridRow v-for="job in jobs.filter(e => e.category == cat)" class="job"
 				:class="{ selected: char.saved.currentJob == job.id }">
 				<Cell class="pl-12 pr-24">
-					<ProgressBar @click="job.select()" class="p5" :progress="job.saved.currentExp"
+					<ProgressBar :title="job.desc" @click="job.select()" class="p5" :progress="job.saved.currentExp"
 						:max="job.currentExpReq">
 						{{ job.name }}
 					</ProgressBar>
@@ -21,8 +21,8 @@
 				<Cell>
 					<Money :money="job.currentIncome" />
 				</Cell>
-				<Cell> {{ ~~job.saved.currentExp }} / {{ job.currentExpReq }} </Cell>
-				<Cell> +{{ job.currentExpGain }} </Cell>
+				<Cell> {{ stable(job.saved.currentExp) }} / {{ kmbt(job.currentExpReq) }} </Cell>
+				<Cell> +{{ kmbt(job.currentExpGain) }} </Cell>
 				<Cell> {{ job.saved.maxLevelReached }} </Cell>
 			</GridRow>
 		</template>
@@ -34,6 +34,7 @@
 import { toRef, computed } from 'vue';
 import { Character } from '../game/character';
 import { jobCategoryIds } from '../game/data'
+import { stableKMBTFormat as stable, KMBTFormat as kmbt } from '../game/lib';
 
 const props = defineProps<{
 	char: Character

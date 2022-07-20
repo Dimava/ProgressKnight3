@@ -152,6 +152,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@modyfi/vite-plugin-yaml@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@modyfi/vite-plugin-yaml@npm:1.0.2"
+  dependencies:
+    "@rollup/pluginutils": ^4.1.2
+    js-yaml: ^4.1.0
+    tosource: ^2.0.0-alpha.3
+  peerDependencies:
+    vite: ^2.6.0
+  checksum: 4198782b3c12d53f576c14a0191725d48be03cac800b7d7283e62e74b44b11d2357a651d8b668102886078b849e6e23aa39cf818d82f01f61e4de463f38eb0ad
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -199,7 +212,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/pluginutils@npm:^4.1.0":
+"@rollup/pluginutils@npm:^4.1.0, @rollup/pluginutils@npm:^4.1.2":
   version: 4.2.1
   resolution: "@rollup/pluginutils@npm:4.2.1"
   dependencies:
@@ -521,6 +534,22 @@ __metadata:
     delegates: ^1.0.0
     readable-stream: ^3.6.0
   checksum: 348edfdd931b0b50868b55402c01c3f64df1d4c229ab6f063539a5025fd6c5f5bb8a0cab409bbed8d75d34762d22aa91b7c20b4204eb8177063158d9ba792981
+  languageName: node
+  linkType: hard
+
+"argparse@npm:^1.0.7":
+  version: 1.0.10
+  resolution: "argparse@npm:1.0.10"
+  dependencies:
+    sprintf-js: ~1.0.2
+  checksum: 7ca6e45583a28de7258e39e13d81e925cfa25d7d4aacbf806a382d3c02fcb13403a07fb8aeef949f10a7cfe4a62da0e2e807b348a5980554cc28ee573ef95945
+  languageName: node
+  linkType: hard
+
+"argparse@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "argparse@npm:2.0.1"
+  checksum: 83644b56493e89a254bae05702abf3a1101b4fa4d0ca31df1c9985275a5a5bd47b3c27b7fa0b71098d41114d8ca000e6ed90cad764b306f8a503665e4d517ced
   languageName: node
   linkType: hard
 
@@ -930,6 +959,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esprima@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "esprima@npm:4.0.1"
+  bin:
+    esparse: ./bin/esparse.js
+    esvalidate: ./bin/esvalidate.js
+  checksum: b45bc805a613dbea2835278c306b91aff6173c8d034223fa81498c77dcbce3b2931bf6006db816f62eacd9fd4ea975dfd85a5b7f3c6402cfd050d4ca3c13a628
+  languageName: node
+  linkType: hard
+
 "estree-walker@npm:^2.0.1, estree-walker@npm:^2.0.2":
   version: 2.0.2
   resolution: "estree-walker@npm:2.0.2"
@@ -1226,6 +1265,29 @@ __metadata:
   version: 2.0.0
   resolution: "isexe@npm:2.0.0"
   checksum: 26bf6c5480dda5161c820c5b5c751ae1e766c587b1f951ea3fcfc973bafb7831ae5b54a31a69bd670220e42e99ec154475025a468eae58ea262f813fdc8d1c62
+  languageName: node
+  linkType: hard
+
+"js-yaml@npm:^3.14.0":
+  version: 3.14.1
+  resolution: "js-yaml@npm:3.14.1"
+  dependencies:
+    argparse: ^1.0.7
+    esprima: ^4.0.0
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: bef146085f472d44dee30ec34e5cf36bf89164f5d585435a3d3da89e52622dff0b188a580e4ad091c3341889e14cb88cac6e4deb16dc5b1e9623bb0601fc255c
+  languageName: node
+  linkType: hard
+
+"js-yaml@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "js-yaml@npm:4.1.0"
+  dependencies:
+    argparse: ^2.0.1
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: c7830dfd456c3ef2c6e355cc5a92e6700ceafa1d14bba54497b34a99f0376cecbb3e9ac14d3e5849b426d5a5140709a66237a8c991c675431271c4ce5504151a
   languageName: node
   linkType: hard
 
@@ -1547,15 +1609,19 @@ __metadata:
   resolution: "progress-knight-3@workspace:."
   dependencies:
     "@intlify/vite-plugin-vue-i18n": ^3.4.0
+    "@modyfi/vite-plugin-yaml": ^1.0.2
     "@types/node": ^18.0.1
     "@vitejs/plugin-vue": ^2.3.3
     "@vue/compiler-sfc": ^3.2.37
     "@vueuse/core": ^8.7.5
     class-transformer: ^0.5.1
     reflect-metadata: ^0.1.13
+    type-fest: ^2.17.0
     typescript: ^4.7.4
     vite: ^2.9.13
     vite-plugin-vue-setup-extend: ^0.4.0
+    vite-plugin-yaml: ^1.0.5
+    vite-plugin-yaml2: ^1.0.0
     vue: ^3.2.37
     vue-i18n: ^9.2.0-beta.36
     vue-tsc: ^0.38.2
@@ -1775,6 +1841,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sprintf-js@npm:~1.0.2":
+  version: 1.0.3
+  resolution: "sprintf-js@npm:1.0.3"
+  checksum: 19d79aec211f09b99ec3099b5b2ae2f6e9cdefe50bc91ac4c69144b6d3928a640bb6ae5b3def70c2e85a2c3d9f5ec2719921e3a59d3ca3ef4b2fd1a4656a0df3
+  languageName: node
+  linkType: hard
+
 "ssri@npm:^9.0.0":
   version: 9.0.1
   resolution: "ssri@npm:9.0.1"
@@ -1850,6 +1923,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tosource@npm:^2.0.0-alpha.2, tosource@npm:^2.0.0-alpha.3":
+  version: 2.0.0-alpha.3
+  resolution: "tosource@npm:2.0.0-alpha.3"
+  checksum: bc03a7571de8ed4306e6721283fa891f2adcab9dd80c46f6f177d4259b34bb192fe3a2cb3e1e2ce16f9db0bc7e534acfcb5478ab094b0ba255f98abfce6dab46
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^2.17.0":
+  version: 2.17.0
+  resolution: "type-fest@npm:2.17.0"
+  checksum: cb626b7434f463632643ee8681c900d17739decd820f28ed2e77de7fb8fc406f30f3e86b1b8f26a76f94fbf781e96347febaa8d06b5cef21fdc5f65ded86ad05
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^4.7.4":
   version: 4.7.4
   resolution: "typescript@npm:4.7.4"
@@ -1904,6 +1991,25 @@ __metadata:
   peerDependencies:
     vite: ">=2.0.0"
   checksum: 1cb6a0bfa8272f256757e5773048a5769ac66c2b1b2cbed588448f3b4ef48acd517e7762e9b4b8bcdd271c21a58c811f10f64b9214168b21786359ffff0c1237
+  languageName: node
+  linkType: hard
+
+"vite-plugin-yaml2@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "vite-plugin-yaml2@npm:1.0.0"
+  checksum: cbe28b51ec0e8a95a05057bcfa69cb459d86e8c2bf330cf7bb6a9b3952435866fbebd6c476ad7c701d3ea11d6c702e373739fe131500e24bf51f4f4d1b3bd820
+  languageName: node
+  linkType: hard
+
+"vite-plugin-yaml@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "vite-plugin-yaml@npm:1.0.5"
+  dependencies:
+    js-yaml: ^3.14.0
+    tosource: ^2.0.0-alpha.2
+  peerDependencies:
+    vite: ^1.0.0-rc.13
+  checksum: 340c1ab152f2eafc90dab2d7aa9983583723ba0e7ecdd5335f2be56e7216711ee7e11afe77b3dea541d1548431962e2600809b705e1434073acdf14e44e70909
   languageName: node
   linkType: hard
 

@@ -21,7 +21,9 @@
 			<Money :money="char.saved.money ** 5" /> <br />
 			<Money :money="char.saved.money ** 6" /> <br />
 
-			<input type="number" v-model="char.saved.money" />
+			$<input type="number" v-model="char.saved.money" />
+			<br>
+			gameSpeed: <input type="number" v-model="gameSpeed" />
 		</aside>
 		<div id="tabs" area="s" class="flex">
 			<div class="tab" v-for="(tab, name) in tabs" @click="tab.active = !tab.active"
@@ -42,7 +44,7 @@
 
 <script setup lang="ts" name="ProgressKnight">
 import { reactive, ref, toRef } from "vue";
-import { char, charsave } from "../game/game";
+import { char, charsave, gameSpeed } from "../game/game";
 import JobsTab from "./JobsTab.vue";
 import SkillsTab from "./SkillsTab.vue";
 import MultipliersTab from "./MultipliersTab.vue";

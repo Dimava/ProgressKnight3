@@ -1,17 +1,15 @@
 const en = {
-	tableHeader: {
-		
-	},
+	tableHeader: {},
 	label: {
-		level: 'Level',
-		incomePerDay: 'Income/day',
-		expRequirement: 'Xp req',
-		expPerDay: 'Xp/day',
-		maxLevel: 'Max level',
+		level: "Level",
+		incomePerDay: "Income/day",
+		expRequirement: "Xp req",
+		expPerDay: "Xp/day",
+		maxLevel: "Max level",
 	},
 	jobs: {
-		qwe: 'wasd'
-	}
+		qwe: "wasd",
+	},
 } as const;
 
 export default en;

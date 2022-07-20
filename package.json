@@ -12,16 +12,20 @@
 		"class-transformer": "^0.5.1",
 		"reflect-metadata": "^0.1.13",
 		"vite-plugin-vue-setup-extend": "^0.4.0",
+		"vite-plugin-yaml2": "^1.0.0",
 		"vue": "^3.2.37",
 		"vue-i18n": "^9.2.0-beta.36"
 	},
 	"devDependencies": {
 		"@intlify/vite-plugin-vue-i18n": "^3.4.0",
+		"@modyfi/vite-plugin-yaml": "^1.0.2",
 		"@types/node": "^18.0.1",
 		"@vitejs/plugin-vue": "^2.3.3",
 		"@vue/compiler-sfc": "^3.2.37",
+		"type-fest": "^2.17.0",
 		"typescript": "^4.7.4",
 		"vite": "^2.9.13",
+		"vite-plugin-yaml": "^1.0.5",
 		"vue-tsc": "^0.38.2"
 	},
 	"packageManager": "yarn@3.2.1"

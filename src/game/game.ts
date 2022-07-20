@@ -7,6 +7,7 @@ export const charsave = useLocalStorage(
 	() =>
 		({
 			jobs: {},
+			skills: {},
 			money: 0,
 			paused: false,
 		} as SavedCharacter)

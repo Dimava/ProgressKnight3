@@ -4,8 +4,8 @@ type displayedName = Branded<"displayedName", string>;
 type displayedDesc = Branded<"displayedDesc", string>;
 type multiplierId = import("./data").multiplierId;
 type jobCategoryId = import("./data").jobCategoryId;
-// type skillCategoryId = import("./data").skillCategoryId;
-// type skillId = import("./data").skillId;
+type skillCategoryId = import("./data").skillCategoryId;
+type skillId = import("./data").skillId;
 type jobId = import("./data").jobId;
 
 interface RawMultiplier {
@@ -17,13 +17,12 @@ interface RawMultiplier {
 interface RawJob {
 	name?: displayedName;
 	desc?: displayedDesc;
-	effectTextTemplate?: string;
 
 	category: jobCategoryId;
 	requirements?: RawRequirement[];
 
-	levelPay: (level: number) => number;
-	levelExp: (level: number) => number;
+	levelPay: (level: level) => number;
+	levelExp: (level: level) => number;
 
 	payMultipliers: multiplierId[];
 	expMultipliers: multiplierId[];
@@ -32,7 +31,14 @@ interface RawJob {
 interface RawSkill {
 	name?: displayedName;
 	desc?: displayedDesc;
-	effectTextTemplate?: string;
+
+	category: skillCategoryId;
+	requirements?: RawRequirement[];
+
+	levelEffects: PartialRecord<multiplierId, (level: level) => number>;
+	levelExp: (level: level) => number;
+
+	expMultipliers: multiplierId[];
 }
 
 interface RawRequirement {}
@@ -43,7 +49,11 @@ interface RawCategory {
 	desc?: displayedDesc;
 }
 
-interface SavedSkill {}
+interface SavedSkill {
+	currentLevel: level;
+	currentExp: exp;
+	maxLevelReached: level;
+}
 interface SavedJob {
 	currentLevel: level;
 	currentExp: exp;
@@ -51,9 +61,11 @@ interface SavedJob {
 }
 interface SavedCharacter {
 	jobs: Record<jobId, SavedJob>;
+	skills: Record<skillId, SavedSkill>;
 
 	money: money;
 	currentJob?: jobId;
+	currentSkill?: skillId;
 	paused: boolean;
 }
 
@@ -118,7 +130,7 @@ type money = Branded<"money", number>;
 
 // 	expMultipliers: multiplierId[];
 
-// 	multiplierEffects: (level: level) => Partial<Record<multiplierId, multi>>;
+// 	multiplierEffects: (level: level) => PartialRecord<multiplierId, multi>;
 // }
 
 // interface SkillSave {
@@ -148,7 +160,7 @@ type money = Branded<"money", number>;
 // 	name: displayedName,
 // 	desc: displayedDesc,
 // 	expense: money,
-// 	effects: Partial<Record<multiplierId, multi>>;
+// 	effects: PartialRecord<multiplierId, multi>;
 // 	category: `ic${string}`;
 // 	requirements: IRequirement[];
 // }
@@ -157,5 +169,9 @@ type money = Branded<"money", number>;
 // }
 
 interface ObjectConstructor {
-	fromEntries<K extends string, V>(entries: [K, V][]): Partial<Record<K, V>>;
+	fromEntries<K extends string, V>(entries: [K, V][]): PartialRecord<K, V>;
 }
+
+type PartialRecord<K extends keyof any, T> = {
+	[P in K]?: T;
+};

@@ -15,7 +15,10 @@
 			"dom",
 			"DOM.Iterable"
 		],
-		"skipDefaultLibCheck": true
+		"skipLibCheck": true,
+		"types": [
+			"@modyfi/vite-plugin-yaml/modules"
+		]
 	},
 	"include": [
 		"src/**/*.ts",
