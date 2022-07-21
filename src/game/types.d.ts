@@ -11,15 +11,17 @@ type jobId = import("./data").jobId;
 interface RawMultiplier {
 	name?: displayedName;
 	desc?: displayedDesc;
+	order: number;
 	effectTextTemplate?: string;
 }
 
 interface RawJob {
 	name?: displayedName;
 	desc?: displayedDesc;
+	order?: number;
 
 	category: jobCategoryId;
-	requirements?: RawRequirement[];
+	requirements?: RawRequirement;
 
 	levelPay: (level: level) => number;
 	levelExp: (level: level) => number;
@@ -31,9 +33,10 @@ interface RawJob {
 interface RawSkill {
 	name?: displayedName;
 	desc?: displayedDesc;
+	order?: number;
 
 	category: skillCategoryId;
-	requirements?: RawRequirement[];
+	requirements?: RawRequirement;
 
 	levelEffects: PartialRecord<multiplierId, (level: level) => number>;
 	levelExp: (level: level) => number;
@@ -41,10 +44,17 @@ interface RawSkill {
 	expMultipliers: multiplierId[];
 }
 
-interface RawRequirement {}
+interface RawRequirement {
+	/** require level of previous job */
+	prev?: level;
+	jobs?: PartialRecord<jobId, level>;
+	skills?: PartialRecord<skillId, level>;
+	money?: money;
+}
 
 interface RawCategory {
 	type: "jobs" | "skills";
+	order: number;
 	name?: displayedName;
 	desc?: displayedDesc;
 }
@@ -175,3 +185,9 @@ interface ObjectConstructor {
 type PartialRecord<K extends keyof any, T> = {
 	[P in K]?: T;
 };
+
+interface ObjectConstructor {
+	entries<K, V>(o: PartialRecord<K, V>): [K, V][];
+	// entries<T extends PartialRecord<infer K, infer V>>(o?: T): [K, V][];
+	// entries(o: undefined): [];
+}

@@ -37,9 +37,9 @@
 			<MultipliersTab :char="char" v-show="tabs.Multipliers.active" />
 		</main>
 	</Grid>
-	<pre style="color: white">
+	<!-- <pre style="color: white">
 		{{ char }}
-	</pre>
+	</pre> -->
 </template>
 
 <script setup lang="ts" name="ProgressKnight">

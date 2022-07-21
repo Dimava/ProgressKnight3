@@ -1,106 +1,78 @@
 import { lv, moneyLin, xpPow } from "../lib";
 
-export const Work: RawJob = {
+export const Work = checkRawJob({
 	category: "BasicJobs",
-	expMultipliers: ["Happiness", "JobExp"],
+	order: 999,
+	expMultipliers: ["Exp", "JobExp"],
 	levelExp: xpPow(10, 1.1),
 	levelPay: moneyLin(12, 0.1),
 	payMultipliers: ["Pay"],
-};
+});
 
-export const LesserSoldier: RawJob = {
-	category: "Army",
+function checkRawJob<T extends RawJob>(v: T): T & RawJob {
+	return v;
+}
+function checkPartialRawJob<T extends Partial<RawJob>>(v: T): T {
+	return v;
+}
+
+let armyN = 0;
+function makeArmy() {
+	const N = ++armyN;
+	const make125 = (n: number) => [1, 2, 5][n % 3] * 10 ** ~~(n / 3);
+	const per = (levels: level, growth: number) => growth ** (1 / levels);
+	return checkPartialRawJob({
+		category: "Army",
+		order: N,
+		expMultipliers: ["Exp", "JobExp", "ArmyExp"],
+		payMultipliers: ["Pay", "ArmyPay"],
+		levelExp: lv.pow(make125(N + 3), per(50, 10)),
+		levelPay: lv.lin(make125(N + 2), 0.1),
+		requirements: { prev: N == 1 ? undefined : N * 5 },
+	});
+}
+
+export const LesserSoldier = checkRawJob({
 	desc: "An untrained soldier, composed of people without money to buy food. Very low pay, used as cannon fodder",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const InfantrySole: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+export const InfantrySole = checkRawJob({
 	desc: "a soldier with basic training and minimally decent. Respectable work, but still a pawn in the big picture",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const VeteranFootman: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+export const VeteranFootman = checkRawJob({
 	desc: "An experienced soldier, who has trained for years and gained a knowledge of warfare that makes him more valuable than any ordinary infantryman",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const Squire: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+export const Squire = checkRawJob({
 	desc: "Some experienced soldiers are recognized by knights to become their squires. Equipped with new weapons, they are a prestige class",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const Knight: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+export const Knight = checkRawJob({
 	desc: "Steel-clad horse warriors with an indomitable experience making them as feared as they are admired",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const EliteKnight: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+Knight.requirements.skills = { ExpSkill: 25 };
+export const EliteKnight = checkRawJob({
 	desc: "Equipped with the best equipment possible, these knights serve the royal family",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const HolyKnight: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+export const HolyKnight = checkRawJob({
 	desc: "Destroying battalions with holy magic, they are knights who mostly serve the Church to destroy demons",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const General: RawJob = {
-	category: "Army",
-	desc: "General",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const LegendaryKnight: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+export const General = checkRawJob({
+	// desc: "General",
+	...makeArmy(),
+});
+export const LegendaryKnight = checkRawJob({
 	desc: "Feared by nations, capable of destroying a kingdom with his magical power. Every 100 years, only one Holy Knight demonstrates enough talent to earn this title.",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-export const DragonKnight: RawJob = {
-	category: "Army",
+	...makeArmy(),
+});
+export const DragonKnight = checkRawJob({
 	desc: "A living legend, a legendary knight capable of taming dragons has not appeared since founder",
-	expMultipliers: ["Happiness", "JobExp", "ArmyExp"],
-	payMultipliers: ["Pay", "ArmyPay"],
-	levelExp: lv.pow(50, 1.1),
-	levelPay: lv.lin(50, 0.1),
-};
-
-// Progress knight english game
-// Army
-// - Lesser soldier – An untrained soldier, composed of people without money to buy food. Very low pay, used as cannon fodder
-// -infantry sole (footman) – a soldier with basic training and minimally decent. Respectable work, but still a pawn in the big picture
-// -Veteran Footman – An experienced soldier, who has trained for years and gained a knowledge of warfare that makes him more valuable than any ordinary infantryman
-// –Squire (Squire) – Some experienced soldiers are recognized by knights to become their squires. Equipped with new weapons, they are a prestige class
-// –Knight – Steel-clad horse warriors with an indomitable experience making them as feared as they are admired
-// –Elite Knight – Equipped with the best equipment possible, these knights serve the royal family
-// –Holy Knight – Destroying battalions with holy magic, they are knights who mostly serve the Church to destroy demons
-// –General –
-// –Legendary Knight – Feared by nations, capable of destroying a kingdom with his magical power. Every 100 years, only one Holy Knight demonstrates enough talent to earn this title.
-// –Dragon Knight – A living legend, a legendary knight capable of taming dragons has not appeared since founder
+	...makeArmy(),
+});
 
 // Cult of the Heavenly Demon
 // Follower – Influenced by tales and legends about the occult, you follow demonic cults with some hesitation

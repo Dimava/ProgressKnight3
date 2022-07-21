@@ -11,19 +11,34 @@
 			</GridRow>
 			<GridRow v-for="job in jobs.filter(e => e.category == cat)" class="job"
 				:class="{ selected: char.saved.currentJob == job.id }">
-				<Cell class="pl-12 pr-24">
-					<ProgressBar :title="job.desc" @click="job.select()" class="p5" :progress="job.saved.currentExp"
-						:max="job.currentExpReq">
-						{{ job.name }}
-					</ProgressBar>
-				</Cell>
-				<Cell> {{ job.saved.currentLevel }} </Cell>
-				<Cell>
-					<Money :money="job.currentIncome" />
-				</Cell>
-				<Cell> {{ stable(job.saved.currentExp) }} / {{ kmbt(job.currentExpReq) }} </Cell>
-				<Cell> +{{ kmbt(job.currentExpGain) }} </Cell>
-				<Cell> {{ job.saved.maxLevelReached }} </Cell>
+				<template v-if="job.isUnlocked">
+					<Cell class="pl-12 pr-24">
+						<ProgressBar :title="job.desc" @click="job.select()" class="p5" :progress="job.saved.currentExp"
+							:max="job.currentExpReq">
+							{{ job.name }}
+						</ProgressBar>
+					</Cell>
+					<Cell> {{ job.saved.currentLevel }} </Cell>
+					<Cell>
+						<Money v-if="job.isUnlocked" :money="job.currentIncome" />
+					</Cell>
+					<Cell> {{ stable(job.saved.currentExp) }} / {{ kmbt(job.currentExpReq) }} </Cell>
+					<Cell> +{{ kmbt(job.currentExpGain) }} </Cell>
+					<Cell> {{ job.saved.maxLevelReached }} </Cell>
+				</template>
+				<template v-else>
+					<Cell class="pl-12 pr-24">
+						<ProgressBar :title="job.desc" class="p5" :progress="0">
+							{{ job.name }}
+						</ProgressBar>
+					</Cell>
+					<Cell colspan="5">
+						<span v-for="(xpl, id) in job.explainRequirements()"
+							:class="`${xpl?.met ? '' : 'un'}met-requirement`">
+							{{ xpl?.source?.name ?? id }}: {{ xpl?.value }}/{{ xpl?.target }}&nbsp;
+						</span>
+					</Cell>
+				</template>
 			</GridRow>
 		</template>
 		<span v-if="!char.saved.currentJob"> Select a job! </span>
@@ -79,5 +94,14 @@ const jobs = computed(() => Object.values(props.char.jobs))
 .gridList>.selected progress-bar {
 	--fg: orange;
 	outline: 1px solid #777;
+}
+
+.unmet-requirement {
+	opacity: 0.5;
+}
+
+.met-requirement {
+	opacity: 0.5;
+	color: greenyellow
 }
 </style>

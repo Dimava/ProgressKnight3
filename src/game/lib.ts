@@ -148,3 +148,43 @@ export function stableKMBTFormat(n: number) {
 	s = suffixes[div - 1] || "e" + div * 3;
 	return `${a.slice(0, 4)}${s}`;
 }
+
+export function propertyComparator<
+	T,
+	K extends keyof T,
+	V extends Record<K, number | string>
+>(keys: K | K[]): (a: T & V, b: T & V) => number {
+	let usedKeys = Array.isArray(keys) ? keys : [keys];
+	return function (a, b) {
+		for (let k of usedKeys) {
+			let av = a[k],
+				bv = b[k];
+			if (av < bv) return -1;
+			if (av > bv) return -1;
+		}
+		return 0;
+	};
+}
+
+type MaybeArray<T> = T | T[];
+export function vsort<T, V extends MaybeArray<number | string>>(
+	array: T[],
+	map: (e: T, i: number, a: T[]) => V
+): T[] {
+	return array
+		.map((e, i, a) => {
+			let v = map(e, i, a);
+			return {
+				e,
+				v: (Array.isArray(v) ? v : [v]) as (number | string)[],
+			};
+		})
+		.sort((a, b) => {
+			for (let i = 0; i < a.v.length; i++) {
+				if (a.v[i] < b.v[i]) return -1;
+				if (a.v[i] > b.v[i]) return 1;
+			}
+			return 0;
+		})
+		.map((e) => e.e);
+}

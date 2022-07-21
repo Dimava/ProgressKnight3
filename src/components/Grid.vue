@@ -65,4 +65,11 @@ styleAttr('rows', (val) => {
 		}
 	`;
 })
+styleAttr('colspan', (val) => {
+	return `
+		*[colspan="${val}"] {
+			grid-column: span ${val};
+		}
+	`;
+})
 </script>
