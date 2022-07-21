@@ -30,7 +30,14 @@ export const skillIds = vsort(
 import * as rawCategories from "./categories";
 import { Character } from "../character";
 import { reactive, unref } from "vue";
-import { defineValue, KMBTFormat, lv, propertyComparator, vsort } from "../lib";
+import {
+	defineValue,
+	idToName,
+	KMBTFormat,
+	lv,
+	propertyComparator,
+	vsort,
+} from "../lib";
 export type categoryId = keyof typeof rawCategories;
 export const categoryIds = vsort(
 	Object.keys(rawCategories) as categoryId[],
@@ -50,37 +57,6 @@ export const skillCategoryIds = categoryIds.filter(
 	(e) => rawCategories[e].type == "skills"
 ) as skillCategoryId[];
 
-export class Multiplier {
-	id: multiplierId;
-	name: displayedName;
-	desc: displayedDesc;
-
-	producers: PartialRecord<skillId, Ref<number>> = {};
-
-	readonly character!: Character;
-
-	constructor(id: multiplierId, character: Character) {
-		const raw = rawMultipliers[id];
-		this.id = id;
-		this.name = raw.name ?? id;
-		this.desc = raw.desc ?? `${id} Multiplier`;
-		defineValue(this, "character", character);
-	}
-
-	get multiplier() {
-		return Object.values(this.producers)
-			.map(unref)
-			.reduce((v, e) => v * e, 1);
-	}
-	get effectText(): string {
-		return `x${KMBTFormat(this.multiplier)} ${this.name}`;
-	}
-	addProducer(source: Skill) {
-		this.producers[source.id] = computed(
-			() => source.currentEffects[this.id]!
-		);
-	}
-}
 function makeBase<Id, Raw extends object, Saved extends object>(data: {
 	proto: Required<Raw>;
 	makeSaved: () => Saved;
@@ -124,6 +100,40 @@ function makeBase<Id, Raw extends object, Saved extends object>(data: {
 	};
 }
 
+export class Multiplier extends makeBase<multiplierId, RawMultiplier, {}>({
+	proto: { name: "mul", desc: "mul desc", order: 999 },
+	makeSaved: () => ({}),
+}) {
+	producers: PartialRecord<skillId, Ref<number>> = {};
+
+	constructor(id: multiplierId, character: Character) {
+		super(
+			id,
+			character,
+			{
+				name: idToName(id),
+				desc: `${id} Multiplier`,
+				...rawMultipliers[id],
+			},
+			{}
+		);
+	}
+
+	get multiplier() {
+		return Object.values(this.producers)
+			.map(unref)
+			.reduce((v, e) => v * e, 1);
+	}
+	get effectText(): string {
+		return `x${KMBTFormat(this.multiplier)} ${this.name}`;
+	}
+	addProducer(source: Skill) {
+		this.producers[source.id] = computed(
+			() => source.currentEffects[this.id]!
+		);
+	}
+}
+
 export class Job extends makeBase<jobId, RawJob, SavedJob>({
 	proto: {
 		category: "BasicJobs",
@@ -142,7 +152,7 @@ export class Job extends makeBase<jobId, RawJob, SavedJob>({
 		super(
 			id,
 			character,
-			{ name: id, desc: `${id} Job`, ...rawJobs[id] },
+			{ name: idToName(id), desc: `${id} Job`, ...rawJobs[id] },
 			(character.saved.jobs[id] ??= Job.makeSaved())
 		);
 	}
@@ -257,7 +267,7 @@ export class Skill extends makeBase<skillId, RawSkill, SavedSkill>({
 			id,
 			character,
 			{
-				name: id,
+				name: idToName(id),
 				desc: `${id} Skill`,
 				...rawSkills[id],
 			},

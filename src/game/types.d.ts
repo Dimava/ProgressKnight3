@@ -11,8 +11,7 @@ type jobId = import("./data").jobId;
 interface RawMultiplier {
 	name?: displayedName;
 	desc?: displayedDesc;
-	order: number;
-	effectTextTemplate?: string;
+	order?: number;
 }
 
 interface RawJob {

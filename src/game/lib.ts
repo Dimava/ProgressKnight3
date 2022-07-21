@@ -188,3 +188,9 @@ export function vsort<T, V extends MaybeArray<number | string>>(
 		})
 		.map((e) => e.e);
 }
+
+export function idToName(id: string): displayedName {
+	let r = id.replaceAll(/(?<!^)(?=[A-Z])/g, " ");
+	console.log({ id, r });
+	return r;
+}

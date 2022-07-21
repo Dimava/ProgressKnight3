@@ -28,7 +28,7 @@
 				</template>
 				<template v-else>
 					<Cell class="pl-12 pr-24">
-						<ProgressBar :title="job.desc" class="p5" :progress="0">
+						<ProgressBar :title="job.desc" class="p5 unmet-progress" :progress="jobUnlockProgress(job)">
 							{{ job.name }}
 						</ProgressBar>
 					</Cell>
@@ -48,7 +48,7 @@
 <script setup lang="ts" name="JobsTab">
 import { toRef, computed } from 'vue';
 import { Character } from '../game/character';
-import { jobCategoryIds } from '../game/data'
+import { Job, jobCategoryIds } from '../game/data'
 import { stableKMBTFormat as stable, KMBTFormat as kmbt } from '../game/lib';
 
 const props = defineProps<{
@@ -57,6 +57,14 @@ const props = defineProps<{
 
 const jobs = computed(() => Object.values(props.char.jobs))
 
+function jobUnlockProgress(job: Job): number {
+	let target = 0, value = 0;
+	const explain = job.explainRequirements();
+	for (let [id, xpl] of Object.entries(explain)) {
+		target++; value += xpl.met ? 1 : xpl.value / xpl.target;
+	}
+	return value / target;
+}
 
 </script>
 
@@ -103,5 +111,11 @@ const jobs = computed(() => Object.values(props.char.jobs))
 .met-requirement {
 	opacity: 0.5;
 	color: greenyellow
+}
+
+.unmet-progress {
+	/* --bg: transparent; */
+	--fg: #0c65ad;
+	--bg: hsl(207, 87%, 20%);
 }
 </style>
