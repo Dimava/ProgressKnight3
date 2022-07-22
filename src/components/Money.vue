@@ -15,10 +15,12 @@
 import { computed, reactive, toRef } from 'vue';
 import { KMBTFormat } from '../game/lib';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	money: number;
-	precition?: number;
-}>();
+	precition: number;
+}>(), {
+	precition: 1e4,
+});
 
 const money = toRef(props, 'money');
 const precition = computed(() => !props.precition ? 1e4 : props.precition ** (props.precition > 1 ? 1 : -1));

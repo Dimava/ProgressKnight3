@@ -11,21 +11,21 @@
 						{{ mul.name }}
 					</ProgressBar>
 				</Cell>
-				<Cell> {{ mul.effectText }} </Cell>
+				<Cell> x{{ stable(mul.multiplier) }} {{ mul.name }} </Cell>
 			</GridRow>
 		</template>
 	</Grid>
 </template>
 
 <script setup lang="ts" name="MultipliersTab">
-import { toRef, computed } from 'vue';
-import { Character } from '../game/character';
-import { multiplierIds } from '../game/data'
+import { toRef, computed } from "vue";
+import { Character } from "../game/character";
+import { multiplierIds } from "../game/data";
+import { stableKMBTFormat as stable, KMBTFormat as kmbt } from "../game/lib";
 
 const props = defineProps<{
-	char: Character
+	char: Character;
 }>();
 
-const multis = computed(() => Object.values(props.char.multipliers))
-
+const multis = computed(() => Object.values(props.char.multipliers));
 </script>

@@ -79,8 +79,8 @@ export function useLocalStorage<T extends object>(
 }
 
 export const lv = {
-	pow(base: number, growth: number) {
-		return (level: level) => round(base * growth ** level, 1);
+	pow(base: number, growth: number, roundBase = 1) {
+		return (level: level) => round(base * growth ** level, roundBase);
 	},
 	lin(base: number, growth: number) {
 		return (level: level) => base * (1 + growth * level);
@@ -94,6 +94,7 @@ export function moneyLin(base: number, growth: number) {
 	return (level: level) => base * (1 + growth * level);
 }
 export function round(n: number, base = 1) {
+	if (!base) return n;
 	if (base == 1) return Math.round(n);
 	return Math.round(n / base) * base;
 }
@@ -128,25 +129,32 @@ export function KMBTFormat(n: number) {
 	return `${a.slice(0, 5)}${s}`;
 }
 
-export function stableKMBTFormat(n: number) {
-	if (n < 1e4) {
-		const len = 5;
-		const s0 = n.toFixed(len - 1);
-		if (s0.length >= len) return s0.slice(0, len);
-		if (s0.includes(".")) return s0.padEnd(len, "0").slice(0, len);
-		return (s0 + ".").padEnd(len, "0").slice(0, len);
+export function stableKMBTFormat(n: number, digits: 3 | 3.5 | 4 = 3.5) {
+	small: if (n < 1e3) {
+		if (digits == 3.5) digits = 3;
+		// D digits, one dot
+		const log = n.toFixed(1).length - 2;
+		let text = n.toFixed(Math.max(0, digits - log));
+		if (digits == log) text += ".";
+		return text;
 	}
+	thousand: if (n < 1e4 && digits > 3) {
+		if (digits <= 4) return n.toFixed(0) + ".";
+		const log = n.toFixed(1).length - 2;
+		return n.toFixed(Math.max(0, digits - log));
+	}
+	if (digits == 3.5) digits = 3;
 
 	const suffixes = "K,M,B,T".split(",");
 	let [s, a, b, e] =
-		n.toExponential(4).match(/(\d+)\.(\d+)e\+(\d+)/) || suffixes;
+		n.toExponential(digits).match(/(\d+)\.(\d+)e\+(\d+)/) || suffixes;
 	a += b;
 	let pow = +e;
 	let mod = pow % 3;
 	let div = ~~(pow / 3);
 	a = a.slice(0, 1 + mod) + "." + a.slice(1 + mod);
 	s = suffixes[div - 1] || "e" + div * 3;
-	return `${a.slice(0, 4)}${s}`;
+	return `${a.slice(0, digits + 1)}${s}`;
 }
 
 export function propertyComparator<
@@ -190,7 +198,5 @@ export function vsort<T, V extends MaybeArray<number | string>>(
 }
 
 export function idToName(id: string): displayedName {
-	let r = id.replaceAll(/(?<!^)(?=[A-Z])/g, " ");
-	console.log({ id, r });
-	return r;
+	return id.replaceAll(/(?<!^)(?=[A-Z])/g, " ");
 }

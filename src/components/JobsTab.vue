@@ -9,22 +9,25 @@
 				<Cell> Xp/day </Cell>
 				<Cell> Max level </Cell>
 			</GridRow>
-			<GridRow v-for="job in jobs.filter(e => e.category == cat)" class="job"
+			<GridRow v-for="job in jobs.filter((e) => e.category == cat)" class="job"
 				:class="{ selected: char.saved.currentJob == job.id }">
 				<template v-if="job.isUnlocked">
 					<Cell class="pl-12 pr-24">
-						<ProgressBar :title="job.desc" @click="job.select()" class="p5" :progress="job.saved.currentExp"
+						<ProgressBar :title="job.desc" @click="job.select()" class="p5" :progress="job.currentExp"
 							:max="job.currentExpReq">
 							{{ job.name }}
 						</ProgressBar>
 					</Cell>
-					<Cell> {{ job.saved.currentLevel }} </Cell>
+					<Cell> {{ job.currentLevel }} </Cell>
 					<Cell>
 						<Money v-if="job.isUnlocked" :money="job.currentIncome" />
 					</Cell>
-					<Cell> {{ stable(job.saved.currentExp) }} / {{ kmbt(job.currentExpReq) }} </Cell>
+					<Cell>
+						{{ stable(job.currentExp) }} /
+						{{ kmbt(job.currentExpReq) }}
+					</Cell>
 					<Cell> +{{ kmbt(job.currentExpGain) }} </Cell>
-					<Cell> {{ job.saved.maxLevelReached }} </Cell>
+					<Cell> {{ job.maxLevelReached }} </Cell>
 				</template>
 				<template v-else>
 					<Cell class="pl-12 pr-24">
@@ -32,12 +35,26 @@
 							{{ job.name }}
 						</ProgressBar>
 					</Cell>
-					<Cell colspan="5">
+					<Cell colspan="4">
 						<span v-for="(xpl, id) in job.explainRequirements()"
 							:class="`${xpl?.met ? '' : 'un'}met-requirement`">
-							{{ xpl?.source?.name ?? id }}: {{ xpl?.value }}/{{ xpl?.target }}&nbsp;
+							<template v-if="!xpl" />
+							<div class="iblk" v-else-if="xpl.source instanceof Job">
+								{{ xpl.source.name ?? id }}: {{ xpl.value }}/{{ xpl.target }}&nbsp;
+							</div>
+							<div class="iblk" v-else-if="xpl.source instanceof Skill">
+								{{ xpl.source.name ?? id }}: {{ xpl.value }}/{{ xpl.target }}&nbsp;
+							</div>
+							<div class="iblk" v-else-if="xpl.source instanceof Multiplier">
+								{{ xpl.source.name ?? id }}: {{ stable(xpl.value) }}/{{ stable(xpl.target) }}&nbsp;
+							</div>
+							<div class="iblk" v-else-if="id == 'money'">
+								Money:
+								<Money :money="xpl!.target" />
+							</div>
 						</span>
 					</Cell>
+					<Cell> {{ job.maxLevelReached }} </Cell>
 				</template>
 			</GridRow>
 		</template>
@@ -46,26 +63,28 @@
 </template>
 
 <script setup lang="ts" name="JobsTab">
-import { toRef, computed } from 'vue';
-import { Character } from '../game/character';
-import { Job, jobCategoryIds } from '../game/data'
-import { stableKMBTFormat as stable, KMBTFormat as kmbt } from '../game/lib';
+import { toRef, computed } from "vue";
+import { Character } from "../game/character";
+import { Job, jobCategoryIds, Multiplier, Skill } from "../game/data";
+import { stableKMBTFormat as stable, KMBTFormat as kmbt } from "../game/lib";
+import Money from "./Money.vue";
 
 const props = defineProps<{
-	char: Character
+	char: Character;
 }>();
 
-const jobs = computed(() => Object.values(props.char.jobs))
+const jobs = computed(() => Object.values(props.char.jobs));
 
 function jobUnlockProgress(job: Job): number {
-	let target = 0, value = 0;
+	let target = 0,
+		value = 0;
 	const explain = job.explainRequirements();
 	for (let [id, xpl] of Object.entries(explain)) {
-		target++; value += xpl.met ? 1 : xpl.value / xpl.target;
+		target++;
+		value += xpl.met ? 1 : xpl.value / xpl.target;
 	}
 	return value / target;
 }
-
 </script>
 
 <style>
@@ -110,12 +129,17 @@ function jobUnlockProgress(job: Job): number {
 
 .met-requirement {
 	opacity: 0.5;
-	color: greenyellow
+	color: greenyellow;
 }
 
 .unmet-progress {
 	/* --bg: transparent; */
-	--fg: #0c65ad;
+	--fg: hsl(207, 87%, 30%);
 	--bg: hsl(207, 87%, 20%);
+	color: #aaa;
+}
+
+.iblk {
+	display: inline-block;
 }
 </style>

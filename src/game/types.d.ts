@@ -48,6 +48,7 @@ interface RawRequirement {
 	prev?: level;
 	jobs?: PartialRecord<jobId, level>;
 	skills?: PartialRecord<skillId, level>;
+	multipliers?: PartialRecord<multiplierId, multi>;
 	money?: money;
 }
 

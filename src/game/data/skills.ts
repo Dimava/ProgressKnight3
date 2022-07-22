@@ -27,6 +27,24 @@ export const JobExpSkill: RawSkill = {
 	},
 };
 
+export const PaySkill: RawSkill = {
+	category: "BasicSkills",
+	expMultipliers: ["Exp", "SkillExp"],
+	levelExp: lv.pow(10, 1.1),
+	levelEffects: {
+		Pay: lv.lin(1, 0.1),
+	},
+};
+
+export const ExpenseSkill: RawSkill = {
+	category: "BasicSkills",
+	expMultipliers: ["Exp", "SkillExp"],
+	levelExp: lv.pow(10, 1.1),
+	levelEffects: {
+		Expense: lv.pow(1, 0.99, 0),
+	},
+};
+
 export const ArmyExpSkill: RawSkill = {
 	category: "BasicSkills",
 	expMultipliers: ["Exp", "SkillExp"],

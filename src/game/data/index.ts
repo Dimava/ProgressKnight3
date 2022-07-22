@@ -124,9 +124,6 @@ export class Multiplier extends makeBase<multiplierId, RawMultiplier, {}>({
 			.map(unref)
 			.reduce((v, e) => v * e, 1);
 	}
-	get effectText(): string {
-		return `x${KMBTFormat(this.multiplier)} ${this.name}`;
-	}
 	addProducer(source: Skill) {
 		this.producers[source.id] = computed(
 			() => source.currentEffects[this.id]!
@@ -203,12 +200,12 @@ export class Job extends makeBase<jobId, RawJob, SavedJob>({
 	}
 	explainRequirements() {
 		const list: PartialRecord<
-			jobId | skillId | "money",
+			jobId | skillId | multiplierId | "money",
 			{
 				value: number;
 				target: number;
 				met: boolean;
-				source?: Job | Skill;
+				source?: Job | Skill | Multiplier;
 			}
 		> = {};
 		let jobs = this.requirements.jobs ?? {};
@@ -224,6 +221,12 @@ export class Job extends makeBase<jobId, RawJob, SavedJob>({
 			let source = this.character.skills[skillId];
 			let value = source.currentLevel;
 			list[skillId] = { target, value, met: value >= target, source };
+		}
+		let multis = this.requirements.multipliers ?? {};
+		for (let [mulId, target] of Object.entries(multis)) {
+			let source = this.character.multipliers[mulId];
+			let value = source.multiplier;
+			list[mulId] = { target, value, met: value >= target, source };
 		}
 		if (this.requirements.money) {
 			let target = this.requirements.money;

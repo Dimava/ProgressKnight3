@@ -26,10 +26,10 @@
 			gameSpeed: <input type="number" v-model="gameSpeed" />
 		</aside>
 		<div id="tabs" area="s" class="flex">
-			<div class="tab" v-for="(tab, name) in tabs" @click="tab.active = !tab.active"
+			<component is="TAB" v-for="(tab, name) in tabs" @click="tab.active = !tab.active"
 				:class="{ active: tab.active }">
 				{{ name }}
-			</div>
+			</component>
 		</div>
 		<main area="m" class="b bg-333">
 			<JobsTab :char="char" v-show="tabs.Jobs.active" />
@@ -37,9 +37,6 @@
 			<MultipliersTab :char="char" v-show="tabs.Multipliers.active" />
 		</main>
 	</Grid>
-	<!-- <pre style="color: white">
-		{{ char }}
-	</pre> -->
 </template>
 
 <script setup lang="ts" name="ProgressKnight">
@@ -100,20 +97,26 @@ body {
 	background: var(--panel-background);
 }
 
-.tab {
+tab {
 	display: block;
 	min-width: 100px;
 	text-align: center;
-	padding: 8px 0;
+	border: 4px solid transparent;
+	box-sizing: border-box;
+	padding: 4px 0;
 	line-height: 1;
 	margin-right: 4px;
 }
 
-.tab:hover {
+tab:hover {
+	border-color: #777;
+}
+
+tab.active {
 	background-color: #777;
 }
 
-.tab.active {
-	background-color: #777;
+tab.active:hover {
+	border-color: #999;
 }
 </style>

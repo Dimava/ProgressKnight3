@@ -53,6 +53,8 @@ export const Knight = checkRawJob({
 	...makeArmy(),
 });
 Knight.requirements.skills = { ExpSkill: 25 };
+Knight.requirements.multipliers = { ArmyPay: 4 };
+Knight.requirements.money = 1e4;
 export const EliteKnight = checkRawJob({
 	desc: "Equipped with the best equipment possible, these knights serve the royal family",
 	...makeArmy(),

@@ -18,9 +18,13 @@
 					</ProgressBar>
 				</Cell>
 				<Cell> {{ skill.saved.currentLevel }} </Cell>
-				<Cell> {{ skill.effectText }} </Cell>
+				<Cell>
+					<div v-for="(eff, id) of skill.currentEffects">
+						x{{ stable(eff!) }} {{ id }}
+					</div>
+				</Cell>
 				<Cell> {{ stable(skill.saved.currentExp) }} / {{ kmbt(skill.currentExpReq) }} </Cell>
-				<Cell> +{{ kmbt(skill.currentExpGain) }} </Cell>
+				<Cell> +{{ stable(skill.currentExpGain) }} </Cell>
 				<Cell> {{ skill.saved.maxLevelReached }} </Cell>
 			</GridRow>
 		</template>
@@ -41,3 +45,9 @@ const props = defineProps<{
 const skills = computed(() => Object.values(props.char.skills))
 
 </script>
+
+<style>
+.nobr {
+	white-space: nowrap;
+}
+</style>
