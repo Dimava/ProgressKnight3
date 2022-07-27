@@ -13,6 +13,8 @@ dist-ssr
 *.local
 
 .yarn
+!.yarn/releases
+.pnp.*
 
 # Editor directories and files
 .vscode/*
